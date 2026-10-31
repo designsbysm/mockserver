@@ -8,6 +8,11 @@ HTTP server to mock API responses for testing.
 api:
   address: :4000
 
+automation:
+  url: http://localhost:3100
+  product: r3id
+  secret: ""
+
 gin:
   debug: false
 
