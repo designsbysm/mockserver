@@ -1,7 +1,13 @@
+// Echoes back the provided status and json.
+//
+// @query {number} [code=200] status code to respond with
+// @query {string} [json] JSON object to respond with; omitted sends the status text
+// @query {number} [delay=0] ms to wait before responding
 package echo
 
 import (
 	"encoding/json"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -20,8 +26,11 @@ func handle(c *gin.Context) {
 	}
 
 	var data map[string]any
-	if err := json.Unmarshal([]byte(c.Query("json")), &data); err != nil {
-		timber.Error(err)
+	strJson := c.Query("json")
+	if len(strJson) > 0 {
+		if err := json.Unmarshal([]byte(strJson), &data); err != nil {
+			timber.Error(err)
+		}
 	}
 
 	delay, err := strconv.Atoi(c.DefaultQuery("delay", "0"))
@@ -34,6 +43,6 @@ func handle(c *gin.Context) {
 	if len(data) > 0 {
 		c.JSON(code, gin.H(data))
 	} else {
-		c.Status(code)
+		c.String(code, http.StatusText(code))
 	}
 }

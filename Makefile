@@ -10,7 +10,8 @@ coverage:
 	go tool cover -html="coverage.out"
 
 docs:
-	godoc2md github.com/designsbysm/mockserver | sed -e s#src/target/##g > DOCUMENTATION.md
+# 	gomarkdoc --output DOCUMENTATION.md ./...
+	gomarkdoc --output DOCUMENTATION.md ./api/...
 
 lint:
 	golangci-lint run
