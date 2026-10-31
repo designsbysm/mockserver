@@ -14,7 +14,5 @@ func main() {
 		panic(err)
 	}
 
-
-
 	api.Serve()
 }

@@ -19,7 +19,9 @@ func handle(c *gin.Context) {
 	}
 
 	var data map[string]any
-	json.Unmarshal([]byte(c.Query("json")), &data)
+	if err := json.Unmarshal([]byte(c.Query("json")), &data); err != nil {
+		timber.Error(err)
+	}
 
 	if len(data) > 0 {
 		c.JSON(code, gin.H(data))

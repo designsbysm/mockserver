@@ -26,8 +26,7 @@ func Serve() {
 
 	// notify
 	if viper.GetBool("gin.release") {
-		security := "HTTP"
-		timber.Info(fmt.Sprintf("listening on %s (%s)", address, security))
+		timber.Info(fmt.Sprintf("listening on %s", address))
 	}
 
 	// wait for ^c
