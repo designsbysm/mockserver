@@ -13,6 +13,18 @@ import (
 	"github.com/spf13/viper"
 )
 
+type Response struct {
+	Success bool        `json:"success"`
+	Results interface{} `json:"results,omitempty"`
+	Error   *ErrorInfo  `json:"error,omitempty"`
+}
+
+type ErrorInfo struct {
+	Code    int    `json:"code"`
+	Type    string `json:"type"`
+	Message string `json:"message"`
+}
+
 // Work module automation for manually testing completion emails.
 //
 // @query {string} [result=success] results success|failure|error
@@ -21,7 +33,7 @@ import (
 func Automation(c *gin.Context) {
 	result := c.DefaultQuery("result", "success")
 	if result == "error" {
-		c.String(http.StatusInternalServerError, "automation error")
+		c.Status(http.StatusInternalServerError)
 		return
 	}
 
@@ -42,15 +54,13 @@ func Automation(c *gin.Context) {
 		return
 	}
 
-	results := gin.H{"success": true}
+	results := Response{
+		Success: true,
+	}
 	if result == "failure" {
-		results = gin.H{
-			"success": false,
-			"error": gin.H{
-				"code":    http.StatusInternalServerError,
-				"type":    "Faux Failure",
-				"message": "faux automation failed",
-			},
+		results = Response{
+			Success: false,
+			Error:   &ErrorInfo{Code: http.StatusInternalServerError, Type: "Faux Failure", Message: "faux automation failed"},
 		}
 	}
 	c.JSON(http.StatusOK, results)
@@ -58,7 +68,7 @@ func Automation(c *gin.Context) {
 	go complete(body.EventID, results)
 }
 
-func complete(eventID string, results gin.H) {
+func complete(eventID string, results Response) {
 	payload, err := json.Marshal(gin.H{"eventId": eventID, "results": results})
 	if err != nil {
 		timber.Error(err)
@@ -81,6 +91,4 @@ func complete(eventID string, results gin.H) {
 		return
 	}
 	defer res.Body.Close()
-
-	timber.Info(string(payload))
 }
