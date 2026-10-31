@@ -16,7 +16,7 @@ lint:
 	golangci-lint run
 
 start:
-	gow run .
+	gow -c -e=go,yaml run .
 
 test:
 	go test ./... -cover -race

@@ -19,7 +19,7 @@ func Environment() error {
 	}
 
 	// setup stuff
-	if viper.GetBool("gin.release") {
+	if !viper.GetBool("gin.debug") {
 		gin.SetMode(gin.ReleaseMode)
 	}
 

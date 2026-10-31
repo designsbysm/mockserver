@@ -25,7 +25,7 @@ func Serve() {
 	}()
 
 	// notify
-	if viper.GetBool("gin.release") {
+	if !viper.GetBool("gin.debug") {
 		timber.Info(fmt.Sprintf("listening on %s", address))
 	}
 

@@ -8,23 +8,17 @@ import (
 )
 
 func Loggers() error {
-	if err := cli(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func cli() error {
-	level := timber.StringToLevel(viper.GetString("timber.cli.level"))
+	level := timber.StringToLevel(viper.GetString("timber.level"))
 	if level < 1 {
 		return nil
 	}
 
-	return timber.New(
+	timber.New(
 		os.Stdout,
 		level,
-		viper.GetString("timber.cli.timestamp"),
-		timber.StringToFlags(viper.GetString("timber.cli.flags")),
+		viper.GetString("timber.timestamp"),
+		timber.StringToFlags(viper.GetString("timber.flags")),
 	)
+
+	return nil
 }
