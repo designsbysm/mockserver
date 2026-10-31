@@ -6,14 +6,25 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/designsbysm/gibson"
+	"github.com/designsbysm/mockserver/api/handlers"
 	"github.com/designsbysm/timber/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 func Serve() {
+	// setup
 	router := gin.New()
-	AddRoute(router)
+
+	router.Use(
+		gin.Recovery(),
+		gibson.Logger(),
+		gibson.Error(),
+	)
+
+	router.Any("/automation", handlers.Automation)
+	router.Any("/echo", handlers.Echo)
 
 	address := viper.GetString("api.address")
 
@@ -24,7 +35,6 @@ func Serve() {
 		}
 	}()
 
-	// notify
 	if !viper.GetBool("gin.debug") {
 		timber.Info(fmt.Sprintf("listening on %s", address))
 	}

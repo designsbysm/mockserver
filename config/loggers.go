@@ -13,12 +13,14 @@ func Loggers() error {
 		return nil
 	}
 
-	timber.New(
+	if err := timber.New(
 		os.Stdout,
 		level,
 		viper.GetString("timber.timestamp"),
 		timber.StringToFlags(viper.GetString("timber.flags")),
-	)
+	); err != nil {
+		return err
+	}
 
 	return nil
 }

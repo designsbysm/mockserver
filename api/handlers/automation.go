@@ -1,9 +1,4 @@
-// Work module automation for manually testing completion emails.
-//
-// @query {string} [result=success] results success|failure|error
-// @query {number} [delay=2000] ms to wait before responding
-// @body  {string} [eventId]
-package automation
+package handlers
 
 import (
 	"bytes"
@@ -18,11 +13,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func AddRoute(r *gin.Engine) {
-	r.Any("/automation", handle)
-}
-
-func handle(c *gin.Context) {
+// Work module automation for manually testing completion emails.
+//
+// @query {string} [result=success] results success|failure|error
+// @query {number} [delay=2000] ms to wait before responding
+// @body  {string} [eventId]
+func Automation(c *gin.Context) {
 	result := c.DefaultQuery("result", "success")
 	if result == "error" {
 		c.String(http.StatusInternalServerError, "automation error")
@@ -86,5 +82,5 @@ func complete(eventID string, results gin.H) {
 	}
 	defer res.Body.Close()
 
-	timber.Info(fmt.Sprintf("%s", payload))
+	timber.Info(string(payload))
 }

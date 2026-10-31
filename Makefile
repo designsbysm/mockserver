@@ -13,6 +13,9 @@ docs:
 # 	gomarkdoc --output DOCUMENTATION.md ./...
 	gomarkdoc --output DOCUMENTATION.md ./api/...
 
+format:
+	go fmt ./...
+
 lint:
 	golangci-lint run
 

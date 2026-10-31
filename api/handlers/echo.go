@@ -1,9 +1,4 @@
-// Echoes back the provided status and json.
-//
-// @query {number} [code=200] status code to respond with
-// @query {string} [json] JSON object to respond with; omitted sends the status text
-// @query {number} [delay=0] ms to wait before responding
-package echo
+package handlers
 
 import (
 	"encoding/json"
@@ -15,11 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AddRoute(r *gin.Engine) {
-	r.Any("/echo", handle)
-}
-
-func handle(c *gin.Context) {
+// Echoes back the provided status and json.
+//
+// @query {number} [code=200] status code to respond with
+// @query {string} [json] JSON object to respond with; omitted sends the status text
+// @query {number} [delay=0] ms to wait before responding
+func Echo(c *gin.Context) {
 	code, err := strconv.Atoi(c.DefaultQuery("code", "200"))
 	if err != nil {
 		timber.Error(err)
