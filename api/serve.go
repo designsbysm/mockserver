@@ -25,6 +25,7 @@ func Serve() {
 
 	router.Any("/automation", handlers.Automation)
 	router.Any("/echo", handlers.Echo)
+	router.Any("/envelope", handlers.Envelope)
 
 	address := viper.GetString("api.address")
 
