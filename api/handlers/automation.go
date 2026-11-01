@@ -5,44 +5,26 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
-	"time"
 
+	"github.com/designsbysm/mockserver/api/utils"
 	"github.com/designsbysm/timber/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
-type Response struct {
-	Success bool        `json:"success"`
-	Results interface{} `json:"results,omitempty"`
-	Error   *ErrorInfo  `json:"error,omitempty"`
-}
-
-type ErrorInfo struct {
-	Code    int    `json:"code"`
-	Type    string `json:"type"`
-	Message string `json:"message"`
-}
-
 // Work module automation for manually testing completion emails.
 //
-// @query {string} [result=success] results success|failure|error
-// @query {number} [delay=2000] ms to wait before responding
-// @body  {string} [eventId]
+// @query {boolean} [success=true]   success or failure in the response body
+// @query {number}  [delay=2000]     ms to wait before responding
+// @body  {string}  [eventId]
 func Automation(c *gin.Context) {
-	result := c.DefaultQuery("result", "success")
-	if result == "error" {
-		c.Status(http.StatusInternalServerError)
+	code := utils.QueryInt(c, "code", -1)
+	if code > 0 {
+		c.String(code, http.StatusText(code))
 		return
 	}
-
-	delay, err := strconv.Atoi(c.DefaultQuery("delay", "2000"))
-	if err != nil {
-		timber.Error(err)
-	} else if delay > 0 {
-		time.Sleep(time.Duration(delay) * time.Millisecond)
-	}
+	success := utils.QueryBool(c, "success", true)
+	utils.Delay(c, 2000)
 
 	var body struct {
 		EventID string `json:"eventId"`
@@ -55,12 +37,13 @@ func Automation(c *gin.Context) {
 	}
 
 	results := Response{
-		Success: true,
+		Success: success,
 	}
-	if result == "failure" {
-		results = Response{
-			Success: false,
-			Error:   &ErrorInfo{Code: http.StatusInternalServerError, Type: "Faux Failure", Message: "faux automation failed"},
+	if !success {
+		results.Error = &ErrorInfo{
+			Code:    http.StatusInternalServerError,
+			Type:    "Faux Failure",
+			Message: "faux automation failed",
 		}
 	}
 	c.JSON(http.StatusOK, results)
