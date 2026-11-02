@@ -9,7 +9,7 @@ import (
 
 // Echoes back the provided status and json.
 //
-// @query {number} [code=200]  status code to respond with
+// @query {number} [code=418]  status code to respond with
 // @query {string} [json] JSON object to respond with; omitted sends the status text
 // @query {number} [delay=0]   ms to wait before responding
 func Echo(c *gin.Context) {
@@ -20,6 +20,11 @@ func Echo(c *gin.Context) {
 	if len(data) > 0 {
 		c.JSON(code, gin.H(data))
 	} else {
-		c.String(code, http.StatusText(code))
+		message := http.StatusText(code)
+		if message == "" {
+			message = "Unknown Error"
+		}
+
+		c.String(code, message)
 	}
 }
