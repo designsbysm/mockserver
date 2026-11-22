@@ -1,0 +1,8 @@
+### GET without deplay
+GET http://localhost:4000/echo
+    ?json={"success":true}
+
+### GET with delay
+GET http://localhost:4000/echo
+    ?json={"success":true}
+    &delay=2000
