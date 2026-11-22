@@ -1,9 +1,9 @@
 package handlers
 
 type Response struct {
-	Success bool        `json:"success"`
-	Results interface{} `json:"results,omitempty"`
-	Error   *ErrorInfo  `json:"error,omitempty"`
+	Success bool       `json:"success"`
+	Results any        `json:"results,omitempty"`
+	Error   *ErrorInfo `json:"error,omitempty"`
 }
 
 type ErrorInfo struct {

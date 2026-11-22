@@ -14,9 +14,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Work module automation for manually testing completion emails.
+// Automation Work module automation for manually testing completion emails.
 //
-// @query {number}  [code]           override normal response to similate an error
+// @query {number}  [code]           override normal response to simulate an error
 // @query {boolean} [success=true]   success or failure in the response body
 // @query {number}  [delay=2000]     ms to wait before responding
 // @body  {string}  [eventId]

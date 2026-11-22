@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Wraps the response in a success/error envelope, always answering 200.
+// Envelope Wraps the response in a success/error envelope, always answering 200.
 //
 // @query {number}  [code=500]     code and status text for the error; ignored when success is true
 // @query {boolean} [success=true] success or failure in the envelope

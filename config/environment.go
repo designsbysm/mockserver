@@ -11,11 +11,11 @@ func Environment() error {
 	// load config.yaml
 	viper.AddConfigPath(".")
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		if _, ok := errors.AsType[viper.ConfigFileNotFoundError](err); ok {
 			return errors.New("./config.yaml not found")
-		} else {
-			return err
 		}
+
+		return err
 	}
 
 	// setup stuff

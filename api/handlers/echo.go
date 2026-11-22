@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Echoes back the provided status and json.
+// Echo Return back the provided status and JSON.
 //
 // @query {number} [code=418]  status code to respond with
 // @query {string} [json] JSON object to respond with; omitted sends the status text
