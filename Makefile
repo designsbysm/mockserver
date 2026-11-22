@@ -10,7 +10,6 @@ coverage:
 	go tool cover -html="coverage.out"
 
 docs:
-# 	gomarkdoc --output DOCUMENTATION.md ./...
 	gomarkdoc --output DOCUMENTATION.md ./api/...
 
 format:
